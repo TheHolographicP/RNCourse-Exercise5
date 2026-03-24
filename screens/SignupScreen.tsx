@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { Alert } from 'react-native';
 
 
 import AuthContent from 'components/Auth/AuthContent';
-import { createUser } from 'api/auth';
+import { AuthApiError, createUser } from 'api/auth';
 import { LoadingOverlay } from 'components/ui/LoadingOverlay';
 
 
@@ -12,8 +13,22 @@ export function SignupScreen() {
 
   async function signupHandler(credentials: { email: string; password: string }) {
     setAuthenticating(true);
-    const user = await createUser(credentials.email, credentials.password);
-    setAuthenticating(false);
+
+    try {
+      await createUser(credentials.email, credentials.password);
+    } catch (error) {
+      const authError =
+        error instanceof AuthApiError
+          ? error
+          : new AuthApiError(
+              'AUTH/UNKNOWN',
+              'Account creation failed. Please try again.'
+            );
+
+      Alert.alert(authError.code, authError.message);
+    } finally {
+      setAuthenticating(false);
+    }
   }
 
   if (authenticating) {

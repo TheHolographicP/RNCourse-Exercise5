@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_KEY = 'AIzaSyBHI0-xeO8mCEhg9kBRU5ogPlELMTHhz_4';
+const API_KEY = process.env.FIREASE_API_KEY;
 const AUTH_URL = 'https://identitytoolkit.googleapis.com/v1';
 
 export type AuthErrorCode =

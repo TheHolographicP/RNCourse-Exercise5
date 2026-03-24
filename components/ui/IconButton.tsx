@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 type Props = {
   icon: React.ComponentProps<typeof Ionicons>['name'];
-  color: string;
+  color: string|undefined;
   size: number;
   onPress: () => void;
 };

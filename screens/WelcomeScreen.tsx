@@ -14,7 +14,6 @@ export function WelcomeScreen() {
       try {
         const response = await axios.get(
           `https://react-native-course-7fe21-default-rtdb.firebaseio.com/message.json?auth=${token}`);
-        console.log('Fetched data:', response.data);
         setMessage(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_KEY = process.env.FIREASE_API_KEY;
+const API_KEY = process.env.EXPO_PUBLIC_FIREBASE_API_KEY;
 const AUTH_URL = 'https://identitytoolkit.googleapis.com/v1';
 
 export type AuthErrorCode =
@@ -40,6 +40,13 @@ type AuthResponseData = {
 };
 
 async function authenticate(mode: AuthMode, email: string, password: string) {
+    if (!API_KEY) {
+        throw new AuthApiError(
+            'AUTH/SERVICE_UNAVAILABLE',
+            'Authentication is not configured. Set EXPO_PUBLIC_FIREBASE_API_KEY and restart Expo.'
+        );
+    }
+
     try {
         const response = await axios.post<AuthResponseData>(
             `${AUTH_URL}/accounts:${mode}?key=${API_KEY}`,
@@ -59,7 +66,7 @@ async function authenticate(mode: AuthMode, email: string, password: string) {
 function mapToAuthError(error: unknown, mode: AuthMode): AuthApiError {
     if (axios.isAxiosError(error)) {
         const firebaseCode = error.response?.data?.error?.message;
-
+        
         switch (firebaseCode) {
             case 'EMAIL_EXISTS':
                 return new AuthApiError(

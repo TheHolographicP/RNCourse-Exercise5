@@ -1,15 +1,20 @@
 import AuthContent from 'components/Auth/AuthContent';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Alert } from 'react-native';
 import { AuthApiError, login } from 'api/auth';
 import { LoadingOverlay } from 'components/ui/LoadingOverlay';
+import { AuthContext } from 'store/auth-context';
+
 
 export function LoginScreen() {
+  const authContext = useContext(AuthContext);
+
   async function loginHandler(credentials: { email: string; password: string }) {
     setAuthenticating(true);
 
     try {
-      await login(credentials.email, credentials.password);
+      const response = await login(credentials.email, credentials.password);
+      authContext.authenticate(response.idToken);
     } catch (error) {
       const authError =
         error instanceof AuthApiError

@@ -1,21 +1,23 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Alert } from 'react-native';
 
 
 import AuthContent from 'components/Auth/AuthContent';
 import { AuthApiError, createUser } from 'api/auth';
 import { LoadingOverlay } from 'components/ui/LoadingOverlay';
-
+import { AuthContext } from 'store/auth-context';
 
 
 export function SignupScreen() {
   const [authenticating, setAuthenticating] = useState(false);
+  const authContext = useContext(AuthContext);
 
   async function signupHandler(credentials: { email: string; password: string }) {
     setAuthenticating(true);
 
     try {
-      await createUser(credentials.email, credentials.password);
+      const response = await createUser(credentials.email, credentials.password);
+      authContext.authenticate(response.idToken);
     } catch (error) {
       const authError =
         error instanceof AuthApiError

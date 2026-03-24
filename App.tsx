@@ -6,8 +6,9 @@ import { LoginScreen } from 'screens/LoginScreen';
 import { SignupScreen } from 'screens/SignupScreen';
 import { WelcomeScreen } from 'screens/WelcomeScreen';
 import { Colors } from 'constants/colors';
+import { RootStackParamList } from 'types/navigation';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function AuthStack() {
   return (
